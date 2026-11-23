@@ -69,3 +69,35 @@ Run these steps in order from a terminal.
 
 - `npm run check`: checks your `.env` and that you can reach the Toolshop API.
 - `npm test`: runs the Playwright tests in `tests/`.
+
+## Week 2 – Day 6: TypeScript Practice
+
+This section contains practical exercises focused on TypeScript fundamentals and safe handling of API response data.
+
+### Topics Covered
+
+- **Type Aliases:** Defining custom types to describe the structure of objects.
+- **Functions:** Creating typed functions with parameters and return values.
+- **Optional Properties:** Handling object properties that may be missing.
+- **Optional Chaining:** Safely accessing nested object properties using `?.`.
+- **Nullish Coalescing:** Providing fallback values using `??`.
+
+### Profile Validator
+
+The `profile-validator.ts` exercise defines a user profile type with required and optional properties. It includes three test users representing different API response scenarios and an `isNotified()` function that safely retrieves notification preferences.
+
+The function returns `false` when settings or notification preferences are missing, preventing errors when accessing optional fields.
+
+### Running the Exercises
+
+Run an individual TypeScript file from the project root using:
+
+```bash
+npx tsx src/profile-validator.ts
+```
+
+For exercises inside the TypeScript basics folder:
+
+```bash
+npx tsx src/ts-basics/filename.ts
+```
