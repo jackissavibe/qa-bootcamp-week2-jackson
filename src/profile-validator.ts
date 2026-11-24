@@ -27,6 +27,6 @@ function isNotified(user: UserProfile): boolean {
     return user.settings?.notifications ?? false;
 }
 
-console.log(isNotified(user1));
+console.log("Notification enabled:", isNotified(user1));
 console.log(isNotified(user2));
 console.log(isNotified(user3));

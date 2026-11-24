@@ -1,3 +1,5 @@
+export {};
+
 let employee: {
     readonly id: number,
     name: string,
