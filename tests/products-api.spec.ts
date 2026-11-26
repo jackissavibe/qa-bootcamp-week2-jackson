@@ -38,7 +38,7 @@ test('POST cart API creates a cart and adds a product', async ({ request }) => {
     {
       headers,
       data: {
-        product_id: '01M8BHDGE6E9QXN4KDWMATM8TD',
+        product_id: '01M8C2GJQVSKTG4M54DXC5MCAH',
         quantity: 1
       }
     }
