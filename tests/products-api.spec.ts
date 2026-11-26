@@ -25,20 +25,39 @@ test('GET products API returns products successfully', async ({ request }) => {
   expect(body.data[0]).toHaveProperty('name');
 });
 
+
 // Test 1: Create a cart and add a product
 test('POST cart API creates a cart and adds a product', async ({ request }) => {
+
+  // First, retrieve available products
+  const productsResponse = await request.get(`${API}/products`, { headers });
+
+  expect(productsResponse.status()).toBe(200);
+
+  const productsBody = await productsResponse.json();
+
+  // Dynamically obtain a product ID
+  const productId = productsBody.data[0].id;
+
+  expect(productId).toBeTruthy();
+
+  // Create a new cart
   const cartResponse = await request.post(`${API}/carts`, { headers });
 
   expect(cartResponse.status()).toBe(201);
 
-  const cartId = (await cartResponse.json()).id
+  const cartId = (await cartResponse.json()).id;
 
+  // Store the cart ID for cleanup
+  createdCartId = cartId;
+
+  // Add the retrieved product to the cart
   const addProductResponse = await request.post(
     `${API}/carts/${cartId}`,
     {
       headers,
       data: {
-        product_id: '01M8C2GJQVSKTG4M54DXC5MCAH',
+        product_id: productId,
         quantity: 1
       }
     }
