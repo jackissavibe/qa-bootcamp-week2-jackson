@@ -1,13 +1,81 @@
+
 import { test, expect } from '@playwright/test';
 
+const API = 'https://api.practicesoftwaretesting.com';
+const headers = { Accept: 'application/json' };
+
+let createdCartId: string | undefined;
+
+// Delete the created cart after each test
+test.afterEach(async ({ request }) => {
+  if (createdCartId) {
+    await request.delete(`${API}/carts/${createdCartId}`, { headers });
+    createdCartId = undefined;
+  }
+});
+
+// Existing test: GET products
 test('GET products API returns products successfully', async ({ request }) => {
-  const response = await request.get(
-    'https://api.practicesoftwaretesting.com/products'
-  );
+  const response = await request.get(`${API}/products`);
 
   expect(response.status()).toBe(200);
 
   const body = await response.json();
 
   expect(body.data[0]).toHaveProperty('name');
+});
+
+
+// Test 1: Create a cart and add a product
+test('POST cart API creates a cart and adds a product', async ({ request }) => {
+
+  // First, retrieve available products
+  const productsResponse = await request.get(`${API}/products`, { headers });
+
+  expect(productsResponse.status()).toBe(200);
+
+  const productsBody = await productsResponse.json();
+
+  // Dynamically obtain a product ID
+  const productId = productsBody.data[0].id;
+
+  expect(productId).toBeTruthy();
+
+  // Create a new cart
+  const cartResponse = await request.post(`${API}/carts`, { headers });
+
+  expect(cartResponse.status()).toBe(201);
+
+  const cartId = (await cartResponse.json()).id;
+
+  // Store the cart ID for cleanup
+  createdCartId = cartId;
+
+  // Add the retrieved product to the cart
+  const addProductResponse = await request.post(
+    `${API}/carts/${cartId}`,
+    {
+      headers,
+      data: {
+        product_id: productId,
+        quantity: 1
+      }
+    }
+  );
+
+  expect(addProductResponse.status()).toBe(200);
+
+  const body = await addProductResponse.json();
+
+  expect(body).toHaveProperty('result');
+});
+
+// Test 2: Request a non-existent cart
+test('GET cart API returns 404 for a non-existent cart', async ({ request }) => {
+  const response = await request.get(
+    `${API}/carts/INVALID_CART_ID_123`,
+    { headers }
+  );
+
+  expect(response.status()).toBe(404);
 });

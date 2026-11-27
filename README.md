@@ -1,71 +1,113 @@
-# QA Bootcamp Week 2 Starter
+# QA Bootcamp Week 2 – Playwright Test Suite
 
-This is the starting point for Week 2 of the QA bootcamp. During the week you will use it to practise:
+This repository contains automated UI and API tests developed during Week 2 of the QA Bootcamp.
+
+The project uses TypeScript and Playwright to practise software testing against the Practice Software Testing (Toolshop) application and REST API.
+
+## Technologies Used
 
 - TypeScript
-- Playwright (UI testing)
+- Playwright
+- Node.js
 - Postman (API testing)
-- The Toolshop REST API
-
-There are no tests in this repo. You will write them during the week.
+- Toolshop REST API
 
 ## Prerequisites
 
-Install these before you start:
+Before getting started, install:
 
-- [Node.js](https://nodejs.org/) (the current LTS version)
+- [Node.js](https://nodejs.org/) (LTS version)
 - [Git](https://git-scm.com/)
 - [VS Code](https://code.visualstudio.com/)
 
-## Setup
+Clone the repository and open the project folder before following the setup instructions.
 
-Run these steps in order from a terminal.
+## Setup and Running Tests
 
-1. Clone the repo and open the folder:
+Follow these three steps to set up and run the test suite.
 
-   ```bash
-   git clone <repo-url>
-   cd qa-bootcamp-week2-starter
-   ```
+### Step 1: Install dependencies and Chromium
 
-2. Install the dependencies:
+Run the following commands from the project root directory:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+npx playwright install chromium
+```
 
-3. Install the Chromium browser for Playwright:
+### Step 2: Configure environment variables
 
-   ```bash
-   npx playwright install chromium
-   ```
+Copy `.env.example` to `.env`.
 
-4. Copy `.env.example` to `.env`:
+On Windows PowerShell:
 
-   ```bash
-   cp .env.example .env
-   ```
+```powershell
+Copy-Item .env.example .env
+```
 
-   `.env` already contains the Toolshop website URL (`TOOLSHOP_URL`) and the Toolshop API URL (`TOOLSHOP_API_URL`). Only change them if your trainer gives you different URLs.
+On macOS/Linux:
 
-5. Check that your setup works:
+```bash
+cp .env.example .env
+```
 
-   ```bash
-   npm run check
-   ```
+The `.env.example` file contains the default Toolshop website and API URLs. Update them only if necessary.
 
-   This sends a GET request to the Toolshop API's `/products` endpoint (no login needed). If everything is set up correctly, it prints your Node version, the HTTP status (200), the number of products, and a last line that says `PASS`.
+### Step 3: Run the complete test suite
 
-> **Warning:** never commit `.env`. It is where your own settings and, later in the course, your secrets (keys, tokens, passwords) live. It is listed in `.gitignore` so Git ignores it. Do not remove it from there.
+Execute:
 
-## Folders
+```bash
+npm test
+```
 
-| Folder     | What it is for |
-|------------|----------------|
-| `tests/`   | Your Playwright tests. It is empty for now; you will add tests during the week. |
-| `scripts/` | Helper scripts. `check.ts` checks your setup and is run by `npm run check`. |
+This runs all Playwright tests configured in the project using Chromium.
 
-## Scripts
+## Test Coverage
 
-- `npm run check`: checks your `.env` and that you can reach the Toolshop API.
-- `npm test`: runs the Playwright tests in `tests/`.
+The suite contains six automated tests across four test files.
+
+| Test file | Test coverage |
+|---|---|
+| `homepage.spec.ts` | Homepage title verification |
+| `invalid login.spec.ts` | Invalid login error message |
+| `search pliers.spec.ts` | Product search using the Page Object Model |
+| `products-api.spec.ts` | GET products, POST cart and GET invalid cart |
+
+## Project Structure
+
+```text
+qa-bootcamp-week2-starter/
+│
+├── pages/
+│   └── search.page.ts
+│
+├── tests/
+│   ├── homepage.spec.ts
+│   ├── invalid login.spec.ts
+│   ├── search pliers.spec.ts
+│   └── products-api.spec.ts
+│
+├── scripts/
+│   └── check.ts
+│
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── playwright.config.ts
+└── README.md
+```
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm test` | Runs the complete Playwright test suite |
+| `npm run check` | Checks environment configuration and API connectivity |
+
+## Important
+
+Never commit your `.env` file to GitHub. It may contain sensitive configuration values and credentials. The file is already included in `.gitignore`.
+
+Always use `.env.example` as the template when setting up the project on a new machine.
